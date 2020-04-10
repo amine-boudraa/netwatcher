@@ -7,7 +7,7 @@ import time
 import requests
 import signal
 import os
-from progress.bar import Bar
+import classes
 #import telegram
 
 
@@ -18,42 +18,7 @@ def keyboardInterruptHandler(signal, frame):
 
 signal.signal(signal.SIGINT, keyboardInterruptHandler)
 
-class bcolors:
-    HEADER = '\033[95m'
-    OKBLUE = '\033[94m'
-    OKGREEN = '\033[92m'
-    WARNING = '\033[93m'
-    MAGENTA = '\033[35m'
-    FAIL = '\033[91m'
-    ENDC = '\033[0m'
-    BOLD = '\033[1m'
-    BLINK = '\033[6m'
-    REVERT = '\033[7m'
-    UNDERLINE = '\033[4m'
 
-class ChargingBar(Bar):
-    suffix = '%(percent)d%%'
-    bar_prefix = ' '
-    bar_suffix = ' '
-    empty_fill = '-'
-    fill = '■'
-
-
-class target:
-
-	def __init__(self, name, value):
-
-		self.name = name
-		self.value = value
-		self.ports = []
-
-	def add_port(self, port):
-
-		self.ports.append(port)
-
-	def __repr__(self):
-
-		return str(self.name) + ": " + str(self.value) + ": " + str(self.ports)
 
 
 def options():
@@ -71,7 +36,7 @@ def options():
     parser.add_option("-T", "--timeout", dest="timeout", type="float", help="Timeout of each request", default=0.1)
     parser.add_option("-m", "--maxtimeout", dest="mtimeout", type="float", help="Max timeout (request kill) of each request", default=15.0)
     parser.add_option("-o", "--outfile", dest="outfile", type="string", help="Name of the file where logs have to be written", default='webservers-status.log')
-    parser.add_option("-n",  "--notigram", dest="notification", action="store_true", help="Activate telegram notification to the 'Alert!!!' group with the 'Status_bot'", default=False)
+    #parser.add_option("-n",  "--notigram", dest="notification", action="store_true", help="Activate telegram notification to the 'Alert!!!' group with the 'Status_bot'", default=False)
     (options, args) = parser.parse_args()
     if not options.cibles:
         parser.error('Target not given')
@@ -238,11 +203,11 @@ def test_connection(ip, port):
         print_timeout(ip, request_time, str(port))
         sock.shutdown(socket.SHUT_WR)
 
-#    except:
-    #    KO_reqs += 1
-    #    print_ko(ip, str(port))
-    #    if notif == True:
-        #    telegram_notif(ip, str(port))
+    except:
+        KO_reqs += 1
+        print_ko(ip, str(port))
+        if notif == True:
+            telegram_notif(ip, str(port))
 
 def main():
     options()
