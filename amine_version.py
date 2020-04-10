@@ -8,7 +8,8 @@ import requests
 import signal
 import os
 import classes
-#import telegram
+import json
+import telegram
 
 
 
@@ -36,7 +37,7 @@ def options():
     parser.add_option("-T", "--timeout", dest="timeout", type="float", help="Timeout of each request", default=0.1)
     parser.add_option("-m", "--maxtimeout", dest="mtimeout", type="float", help="Max timeout (request kill) of each request", default=15.0)
     parser.add_option("-o", "--outfile", dest="outfile", type="string", help="Name of the file where logs have to be written", default='webservers-status.log')
-    #parser.add_option("-n",  "--notigram", dest="notification", action="store_true", help="Activate telegram notification to the 'Alert!!!' group with the 'Status_bot'", default=False)
+    parser.add_option("-n",  "--notigram", dest="notification", action="store_true", help="Activate telegram notification to the 'Alert!!!' group with the 'Status_bot'", default=False)
     (options, args) = parser.parse_args()
     if not options.cibles:
         parser.error('Target not given')
@@ -148,9 +149,15 @@ def progressbar(sleeptime):
             time.sleep(sleeptime / 100)
             bar.next()
 
-#def telegram_notif(url, port):
-#        bot = telegram.Bot(token='1093736486:AAH4hKrx81zD_7dq7VQMMVNSOlnHiUV0wNo')
-#        bot.send_message('-378188970', text="Le domaine ou l'IP " + url +':' + port + " est Down - Retourne bosser!")
+def telegram_notif(url, port):
+    with open('configuration.json') as json_file:
+        data = json.load(json_file)
+        for field in data['telegram_configuration']:
+            telegramBotToken = field['telegramBotToken']
+            telegramChatID   = field['telegramChatID']
+            bot = telegram.Bot(token=telegramBotToken)
+            bot.send_message(telegramChatID, text="Le domaine ou l'IP " + str(url) +':' + str(port) + " est Down - Retourne bosser!")
+
 
 
 def parseCibles():
