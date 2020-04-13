@@ -147,8 +147,8 @@ def test_connection(ip, port):
     except:
         KO_reqs += 1
         print_ko(ip, str(port))
-        #if notif == True:
-         #    telegram_notif(ip, str(port))
+        if notif == True:
+            telegram_notif(ip, str(port))
 
 signal.signal(signal.SIGINT, keyboardInterruptHandler)
 
