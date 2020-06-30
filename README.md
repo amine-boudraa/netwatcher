@@ -1,7 +1,7 @@
 # Netwatcher
 
-Netwatcher is a Python tool to help pentesters.
-The tool pings you or your telegram channel when the target is down.
+Netwatcher is a Python tool to help experts during pentest assesments.
+The tool pings you or your telegram channel when the target you work on is down.
 
 
 
