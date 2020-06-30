@@ -7,7 +7,7 @@ The tool pings you or your telegram channel when the target is down.
 
 ## Setup
 
-Use the requirement script to install needed libraries and generate your telegram configuration file.
+Use the setup script to install needed libraries and generate your telegram configuration file.
 
 python3 setup.py -r
 
